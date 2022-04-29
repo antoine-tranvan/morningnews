@@ -2,6 +2,8 @@ import React from "react";
 import "./App.css";
 import ScreenHome from "./ScreenHome";
 import ScreenMyArticles from "./ScreenMyArticles";
+import ScreenLatest from "./ScreenLatest";
+
 import ScreenSource from "./ScreenSource";
 import ScreenArticlesBySource from "./ScreenArticlesBySource";
 import ScreenUser from "./ScreenUser";
@@ -30,6 +32,7 @@ function App() {
             component={ScreenArticlesBySource}
           />
           <Route path="/screenmyarticles" component={ScreenMyArticles} />
+          <Route path="/screenlatest" component={ScreenLatest} />
           <Route path="/screenuser" component={ScreenUser} />
         </Switch>
       </Router>

@@ -22,6 +22,13 @@ function Nav(props) {
           </Link>
         </Menu.Item>
 
+        <Menu.Item key="test">
+          <Link to="/screenlatest">
+            <Icon type="read" />
+            Latest
+          </Link>
+        </Menu.Item>
+
         <Menu.Item key="user">
           <Link to="/screenuser">
             <Icon type="user" />
