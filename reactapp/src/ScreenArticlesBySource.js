@@ -69,6 +69,12 @@ function ScreenArticlesBySource(props) {
     setIsModalVisible(array4);
   };
 
+  const handleCancel = (index) => {
+    var array5 = [...isModalVisible];
+    array5[index] = false;
+    setIsModalVisible(array5);
+  };
+
   async function addToDatabase(title, description, image, isliked) {
     var rawResponse = await fetch("/updateArticles", {
       method: "POST",
@@ -82,12 +88,6 @@ function ScreenArticlesBySource(props) {
       message.success("Article ajouté aux favoris", 2);
     }
   }
-
-  const handleCancel = (index) => {
-    var array5 = [...isModalVisible];
-    array5[index] = false;
-    setIsModalVisible(array5);
-  };
 
   var cardList = articlesList.map((element, i) => (
     <div style={{ display: "flex", justifyContent: "center" }}>
