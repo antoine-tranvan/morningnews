@@ -3,7 +3,7 @@ import "./App.css";
 import { Card, Icon } from "antd";
 import Nav from "./Nav";
 import { useParams } from "react-router-dom";
-import { Modal } from "antd";
+import { Modal, message } from "antd";
 import { connect } from "react-redux";
 
 const { Meta } = Card;
@@ -11,6 +11,8 @@ const { Meta } = Card;
 function ScreenArticlesBySource(props) {
   const [articlesList, setArticlesList] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState([]);
+  const [isLiked, setIsLiked] = useState([]);
+  const [test, setTest] = useState(0);
 
   var { id } = useParams();
 
@@ -36,9 +38,24 @@ function ScreenArticlesBySource(props) {
         body: `token=${props.token}`,
       });
       var myarticles = await rawArticles.json();
+
+      var array3 = [];
+
+      for (let i = 0; i < response.articles.length; i++) {
+        var color = "grey";
+        console.log("test");
+        for (let j = 0; j < myarticles.myarticles.length; j++) {
+          console.log("test2");
+          if (response.articles[i].title == myarticles.myarticles[j].title) {
+            color = "blue";
+          }
+        }
+        array3.push(color);
+      }
+      setIsLiked(array3);
     }
     loadData();
-  }, []);
+  }, [test]);
 
   const showModal = (index) => {
     var array3 = [...isModalVisible];
@@ -52,12 +69,18 @@ function ScreenArticlesBySource(props) {
     setIsModalVisible(array4);
   };
 
-  async function addToDatabase(title, description, image) {
+  async function addToDatabase(title, description, image, isliked) {
     var rawResponse = await fetch("/updateArticles", {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: `token=${props.token}&title=${title}&description=${description}&img=${image}`,
     });
+    setTest(test + 1);
+    if (isliked == "blue") {
+      message.warning("Article déjà dans les favoris", 2);
+    } else {
+      message.success("Article ajouté aux favoris", 2);
+    }
   }
 
   const handleCancel = (index) => {
@@ -82,12 +105,13 @@ function ScreenArticlesBySource(props) {
           <Icon
             type="like"
             key="ellipsis"
-            style={{ color: "grey" }}
+            style={{ color: isLiked[i] }}
             onClick={() =>
               addToDatabase(
                 element.title,
                 element.description,
-                element.urlToImage
+                element.urlToImage,
+                isLiked[i]
               )
             }
           />,

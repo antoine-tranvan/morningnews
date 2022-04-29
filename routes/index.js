@@ -71,14 +71,23 @@ router.post("/sign-in", async function (req, res, next) {
 
 router.post("/updateArticles", async function (req, res, next) {
   let results = false;
+  let alreadyExist = false;
 
   var user = await userModel.findOne({ token: req.body.token });
 
-  user.articles.push({
-    title: req.body.title,
-    description: req.body.description,
-    img: req.body.img,
-  });
+  for (var i = 0; i < user.articles.length; i++) {
+    if (user.articles[i].title == req.body.title) {
+      alreadyExist = true;
+    }
+  }
+
+  if (alreadyExist == false) {
+    user.articles.push({
+      title: req.body.title,
+      description: req.body.description,
+      img: req.body.img,
+    });
+  }
 
   var userSaved = await user.save();
 
