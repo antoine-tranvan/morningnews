@@ -3,7 +3,8 @@ import "./App.css";
 import { Card, Icon } from "antd";
 import Nav from "./Nav";
 import { useParams } from "react-router-dom";
-import { Modal, message } from "antd";
+import { Modal, message, Drawer, Button, List } from "antd";
+import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 
 const { Meta } = Card;
@@ -13,6 +14,8 @@ function ScreenArticlesBySource(props) {
   const [isModalVisible, setIsModalVisible] = useState([]);
   const [isLiked, setIsLiked] = useState([]);
   const [test, setTest] = useState(0);
+  const [visible, setVisible] = useState(false);
+  const [sourceList, setSourceList] = useState([]);
 
   var { id } = useParams();
 
@@ -21,7 +24,7 @@ function ScreenArticlesBySource(props) {
   useEffect(() => {
     async function loadData() {
       var rawResponse = await fetch(
-        `https://newsapi.org/v2/top-headlines?sources=${id}&apiKey=1b4830bed6fd4008835ab47e6392c88f&language=${props.language}`
+        `https://newsapi.org/v2/top-headlines?sources=${id}&apiKey=f2902093791644f9ab5bc909efd35172&language=${props.language}`
       );
       var response = await rawResponse.json();
       var array2 = [];
@@ -53,6 +56,12 @@ function ScreenArticlesBySource(props) {
         array3.push(color);
       }
       setIsLiked(array3);
+
+      var rawArticles = await fetch(
+        `https://newsapi.org/v2/top-headlines/sources?apiKey=f2902093791644f9ab5bc909efd35172&language=${props.language}`
+      );
+      var articles = await rawArticles.json();
+      setSourceList(articles.sources);
     }
     loadData();
   }, [test]);
@@ -87,6 +96,11 @@ function ScreenArticlesBySource(props) {
     } else {
       message.success("Article ajouté aux favoris", 2);
     }
+  }
+
+  function coucou() {
+    setTest(test + 1);
+    setVisible(false);
   }
 
   var cardList = articlesList.map((element, i) => (
@@ -130,10 +144,45 @@ function ScreenArticlesBySource(props) {
     </div>
   ));
 
+  const showDrawer = () => {
+    setVisible(true);
+  };
+
+  const onClose = () => {
+    setVisible(false);
+  };
+
   return (
     <div>
       <Nav />
-      <div className="Banner" />
+      <div className="Banner">
+        <Button type="primary" onClick={showDrawer}>
+          Liste des sources
+        </Button>
+        <Drawer
+          title="Mes sources"
+          placement="left"
+          onClose={onClose}
+          visible={visible}
+        >
+          <List
+            itemLayout="horizontal"
+            dataSource={sourceList}
+            renderItem={(item) => (
+              <List.Item>
+                <Link
+                  to={`/screenarticlesbysource/${item.id}`}
+                  onClick={() => coucou()}
+                >
+                  <List.Item.Meta
+                    title={<a href="https://ant.design">{item.name}</a>}
+                  />
+                </Link>
+              </List.Item>
+            )}
+          />
+        </Drawer>
+      </div>
       <div className="Card">{cardList}</div>
     </div>
   );
