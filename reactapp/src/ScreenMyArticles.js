@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
-import { Card, Icon } from "antd";
+import { Card, Icon, Modal } from "antd";
 import Nav from "./Nav";
 import { connect } from "react-redux";
 
@@ -8,6 +8,7 @@ const { Meta } = Card;
 
 function ScreenMyArticles(props) {
   const [myarticles, setMyArticles] = useState([]);
+  const [isModalVisible, setIsModalVisible] = useState([]);
 
   useEffect(() => {
     async function loadData() {
@@ -18,6 +19,12 @@ function ScreenMyArticles(props) {
       });
       var response = await rawResponse.json();
       setMyArticles(response.myarticles);
+      var array2 = [];
+
+      for (var k = 0; k < response.myarticles.length; k++) {
+        array2.push(false);
+      }
+      setIsModalVisible(array2);
     }
     loadData();
   }, []);
@@ -37,6 +44,24 @@ function ScreenMyArticles(props) {
     setMyArticles(response.myarticles);
   }
 
+  const showModal = (index) => {
+    var array3 = [...isModalVisible];
+    array3[index] = true;
+    setIsModalVisible(array3);
+  };
+
+  const handleOk = (index) => {
+    var array4 = [...isModalVisible];
+    array4[index] = false;
+    setIsModalVisible(array4);
+  };
+
+  const handleCancel = (index) => {
+    var array5 = [...isModalVisible];
+    array5[index] = false;
+    setIsModalVisible(array5);
+  };
+
   var newArticles = myarticles.map((element, i) => (
     <div style={{ display: "flex", justifyContent: "center" }}>
       <Card
@@ -49,7 +74,7 @@ function ScreenMyArticles(props) {
         }}
         cover={<img alt="example" src={element.img} />}
         actions={[
-          <Icon type="read" key="ellipsis2" />,
+          <Icon type="read" key="ellipsis2" onClick={() => showModal(i)} />,
           <Icon
             type="delete"
             key="ellipsis"
@@ -57,6 +82,14 @@ function ScreenMyArticles(props) {
           />,
         ]}
       >
+        <Modal
+          title={element.title}
+          visible={isModalVisible[i]}
+          onOk={() => handleOk(i)}
+          onCancel={() => handleCancel(i)}
+        >
+          <p>{element.description}</p>
+        </Modal>
         <Meta title={element.title} description={element.description} />
       </Card>
     </div>

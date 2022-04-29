@@ -11,7 +11,7 @@ function ScreenSource(props) {
   useEffect(() => {
     async function loadData() {
       var rawResponse = await fetch(
-        `https://newsapi.org/v2/top-headlines/sources?apiKey=1b4830bed6fd4008835ab47e6392c88f&language=${props.language}`
+        `https://newsapi.org/v2/top-headlines/sources?apiKey=f2902093791644f9ab5bc909efd35172&language=${props.language}`
       );
       var response = await rawResponse.json();
       setSourceList(response.sources);

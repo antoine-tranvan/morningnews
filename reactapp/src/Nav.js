@@ -11,7 +11,14 @@ function Nav(props) {
         <Menu.Item key="mail">
           <Link to="/screensource">
             <Icon type="home" />
-            Sources
+            By Sources
+          </Link>
+        </Menu.Item>
+
+        <Menu.Item key="test">
+          <Link to="/screenlatest">
+            <Icon type="read" />
+            Latest by Category
           </Link>
         </Menu.Item>
 
@@ -19,13 +26,6 @@ function Nav(props) {
           <Link to="/screenmyarticles">
             <Icon type="read" />
             My Articles
-          </Link>
-        </Menu.Item>
-
-        <Menu.Item key="test">
-          <Link to="/screenlatest">
-            <Icon type="read" />
-            Latest
           </Link>
         </Menu.Item>
 
